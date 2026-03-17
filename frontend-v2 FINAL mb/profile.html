@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airé • Chat</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="navbar.js" defer></script>
+  <script src="aire-data.js" defer></script>
+  <script src="profile.js" defer></script>
+  <script src="profilebutterfly.js" defer></script>
+</head>
+
+<body class="profile-page">
+  <!-- Top Navbar -->
+  <header id="navbar"></header>
+
+  <!-- Green background section -->
+  <section class="profile-hero">
+    <div class="profile-hero-inner">
+      <h1 class="profile-title">My Profile</h1>
+
+      <div class="profile-grid">
+      <!-- Account Details -->
+      <div class="profile-card account-block">
+        <h2 class="profile-card-title">Account Details</h2>
+
+        <!-- Profile photo -->
+        <div class="profile-photo">
+          <img id="profilePhotoImg" src="profile.jpeg" alt="Profile photo" />
+        </div>
+
+        <!-- CURRENT (read-only) -->
+        <div class="account-section">
+          <div class="section-label">Current Details</div>
+
+          <div class="readonly-row">
+            <span class="ro-label">Name</span>
+            <span class="ro-value" id="roName">—</span>
+          </div>
+
+          <div class="readonly-row">
+            <span class="ro-label">Email</span>
+            <span class="ro-value" id="roEmail">—</span>
+          </div>
+
+          <div class="readonly-row">
+            <span class="ro-label">Password</span>
+            <span class="ro-value" id="roPassword">••••••••</span>
+          </div>
+        </div>
+
+        <!-- UPDATE (editable) -->
+        <form id="updateProfileForm" class="account-section">
+          <div class="section-label">Update Details</div>
+
+          <label class="field">
+            <span class="field-label">New Name</span>
+            <input id="updName" type="text" placeholder="Enter new name" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">New Email</span>
+            <input id="updEmail" type="email" placeholder="Enter new email" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">New Password</span>
+            <input id="updPassword" type="password" placeholder="Enter new password" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Profile Picture</span>
+            <input id="updPhoto" type="file" accept="image/*" />
+            <small class="hint">PNG/JPG. Preview updates immediately.</small>
+          </label>
+
+          <button type="submit" class="btn btn-filled profile-btn">Update Profile</button>
+        </form>
+      </div>
+
+        <!-- Card 2: My Butterfly -->
+        <div class="profile-card">
+
+          <div class="profile-hero-inner">
+            <h2 class="profile-card-title">My Butterfly</h2>
+            <button class="edit-btn">✎</button>
+          </div>
+
+          <div class="butterfly-wrap">
+            <img id="butterflyImg" src="assets/butterfly/egg.png">
+          </div>
+
+          <div id="butterflyNotice" class="butterfly-notice"></div>
+
+          <div class="butterfly-stats">
+
+            <div class="butterfly-stat">
+              <span id="butterflyHealth">Health: New Life</span>
+            </div>
+
+            <div class="butterfly-stat">
+              <span id="butterflyBond">Bond Level: 0</span>
+            </div>
+
+            <div class="butterfly-stat">
+              <span id="butterflyMood">Mood reflected: None yet</span>
+            </div>
+
+          </div>
+
+          <a class="btn btn-filled profile-btn" href="growth.html">
+            View Growth History
+          </a>
+        </div>
+
+        <!-- Card 3: Recent Chat History -->
+        <div class="profile-card">
+
+          <h2 class="profile-card-title">Recent Chat History</h2>
+
+          <div id="recentChatList" class="recent-chat-list"></div>
+
+          <a class="btn btn-filled profile-btn" href="history.html">
+            View All Chats
+          </a>
+
+        </div>
+    </div>
+  </section>
+
+</body>
+</html>
