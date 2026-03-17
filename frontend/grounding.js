@@ -1,3 +1,4 @@
+const STORAGE_KEY = "grounding-progress";
 const TOTAL_STEPS = 5;
 const completedSteps = new Set();
 
@@ -27,8 +28,11 @@ function doneStep(event, index) {
 
   completedSteps.add(index);
 
+  //✅ SAVE steps
+  saveSteps();
+
   // Mark the button row as done
-  const stepBtn = document.getElementById(`step-0`.replace('0', index));
+  const stepBtn = document.getElementById(`step-${index}`);
   document.getElementById(`step-${index}`).classList.add('done');
 
   // Change icon to ✓
@@ -60,3 +64,94 @@ function updateProgress() {
     msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
+
+function saveInputs() {
+  const allInputs = document.querySelectorAll(".step-input");
+
+  const values = Array.from(allInputs).map(input => input.value);
+
+  localStorage.setItem(STORAGE_KEY + "-inputs", JSON.stringify(values));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".step-input").forEach(input => {
+    input.addEventListener("input", saveInputs);
+  });
+});
+
+function loadInputs() {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY + "-inputs")) || [];
+
+  const allInputs = document.querySelectorAll(".step-input");
+
+  allInputs.forEach((input, index) => {
+    if (saved[index]) {
+      input.value = saved[index];
+    }
+  });
+}
+
+function autoCompleteStepsFromInputs() {
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const inputs = document.querySelectorAll(`#inputs-${i} .step-input`);
+    
+    const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+
+    if (allFilled && !completedSteps.has(i)) {
+      completedSteps.add(i);
+
+      const step = document.getElementById(`step-${i}`);
+      if (step) {
+        step.classList.add("done");
+        const icon = step.querySelector(".step-icon");
+        if (icon) icon.textContent = "✓";
+      }
+
+      const arrow = document.getElementById(`arrow-${i}`);
+      if (arrow) {
+        arrow.textContent = "✓";
+        arrow.style.color = "#2d5c28";
+      }
+    }
+  }
+
+  updateProgress();
+}
+
+function saveSteps() {
+  const stepsArray = Array.from(completedSteps);
+  localStorage.setItem(STORAGE_KEY + "-steps", JSON.stringify(stepsArray));
+}
+
+function loadSteps() {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY + "-steps")) || [];
+
+  saved.forEach(index => {
+    completedSteps.add(index);
+
+    // Restore UI
+    const step = document.getElementById(`step-${index}`);
+    if (step) {
+      step.classList.add("done");
+
+      const icon = step.querySelector(".step-icon");
+      if (icon) icon.textContent = "✓";
+    }
+
+    const arrow = document.getElementById(`arrow-${index}`);
+    if (arrow) {
+      arrow.textContent = "✓";
+      arrow.style.color = "#2d5c28";
+    }
+  });
+
+  updateProgress();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  loadInputs();
+  loadSteps();
+  autoCompleteStepsFromInputs();
+
+});

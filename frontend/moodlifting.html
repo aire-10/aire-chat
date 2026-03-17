@@ -98,12 +98,51 @@
   <img src="logo.png" alt="Butterfly" class="ml-butterfly">
 
   <script src="booster.js"></script>
-  <script src="cross-off.js"></script>
+  <!-- <script src="cross-off.js"></script> -->
   <script>
     // Initialize cross-off feature for Mood Lifting page
     document.addEventListener('DOMContentLoaded', () => {
-      initCrossOff('mood-lifting');
+      // initCrossOff('mood-lifting');
     });
+  </script>
+  <script src="progress.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    checkDailyReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    scheduleMidnightReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    initProgress({
+      selector: ".thought-card",
+      storageKey: "moodlifting-progress",
+      activeClass: "crossed-off"
+    });
+
+    // ✅ ADD THIS
+    const resetBtn = document.querySelector(".cross-off-reset-btn");
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+
+        document.querySelectorAll(".thought-card").forEach(item => {
+          item.classList.remove("crossed-off");
+        });
+
+        localStorage.removeItem("moodlifting-progress");
+      });
+    }
+
+  });
   </script>
   <script src="aire-data.js"></script>
 </body>
