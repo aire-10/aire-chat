@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airé • Chat History</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="history-page">
+
+  <!-- (Optional but recommended) protect page -->
+  <script>
+    if (!localStorage.getItem("authToken")) window.location.href = "login.html";
+  </script>
+
+  <!-- Dynamic navbar -->
+  <header id="navbar"></header>
+
+
+  <main class="history-wrap">
+    <header class="history-hero">
+      <h1>Chat History</h1>
+      <span id ="sessionCount" class="session-count"></span>
+    </header>
+
+    <section class="history-panel">
+      <!-- Search -->
+      <div class="history-search">
+        <span class="history-search-icon">⌕</span>
+        <input id="historySearch" type="text" placeholder="Search Keywords (e.g. anxious, exam, sleep)" />
+      </div>
+
+      <!-- Filters -->
+      <div class="history-filters">
+        <!-- ALL (simple toggle pill) -->
+        <button class="filter-pill is-active" type="button" data-filter="all">
+          All
+        </button>
+
+        <!-- TIME dropdown pill -->
+        <div class="pill-dd" data-dd="time">
+          <button class="filter-pill" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="pill-label" id="timeLabel">This week</span>
+            <span class="pill-caret">▾</span>
+          </button>
+
+          <div class="pill-menu" role="menu">
+            <button type="button" class="pill-item" data-value="this_week">This week</button>
+            <button type="button" class="pill-item" data-value="january">January</button>
+            <button type="button" class="pill-item" data-value="february">February</button>
+            <button type="button" class="pill-item" data-value="march">March</button>
+            <button type="button" class="pill-item" data-value="april">April</button>
+            <button type="button" class="pill-item" data-value="may">May</button>
+            <button type="button" class="pill-item" data-value="june">June</button>
+            <button type="button" class="pill-item" data-value="july">July</button>
+            <button type="button" class="pill-item" data-value="august">August</button>
+            <button type="button" class="pill-item" data-value="september">September</button>
+            <button type="button" class="pill-item" data-value="october">October</button>
+            <button type="button" class="pill-item" data-value="november">November</button>
+            <button type="button" class="pill-item" data-value="december">December</button>
+          </div>
+        </div>
+
+        <!-- MOOD dropdown pill -->
+        <div class="pill-dd" data-dd="mood">
+          <button class="filter-pill" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="pill-label" id="moodLabel">Mood: Anxious</span>
+            <span class="pill-caret">▾</span>
+          </button>
+
+          <div class="pill-menu" role="menu">
+            <button type="button" class="pill-item" data-value="any">Any mood</button>
+            <button type="button" class="pill-item" data-value="anxious">Anxious</button>
+            <button type="button" class="pill-item" data-value="happy">Happy</button>
+            <button type="button" class="pill-item" data-value="sad">Sad</button>
+            <button type="button" class="pill-item" data-value="stressed">Stressed</button>
+            <button type="button" class="pill-item" data-value="tired">Tired</button>
+            <button type="button" class="pill-item" data-value="calm">Calm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div id="historyList" class="history-list"></div>
+
+      <!-- Pagination -->
+      <div class="history-pagination">
+        <button id="prevPage" class="page-btn" type="button">Previous</button>
+
+        <div id="pageNumbers" class="page-numbers"></div>
+
+        <button id="nextPage" class="page-btn" type="button">Next &gt;</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="navbar.js" defer></script>
+  <script src="history.js" defer></script>
+  
+</body>
+</html>

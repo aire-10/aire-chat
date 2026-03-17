@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airé • Chat</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="navbar.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Dynamic navbar -->
+<header id="navbar"></header>
+
+<!-- MAIN -->
+<div class="container">
+
+    <a href="journal history.html" class="back-btn">← Back to History</a>
+
+    <div class="title-row">
+        <h1>Journal Entries History</h1>
+        <img src="inJar.png" alt="Butterfly">
+    </div>
+
+    <div class="detail-layout">
+        <div class="detail-left" id="detailText"></div>
+        <div class="detail-right" id="detailImage"></div>
+    </div>
+
+    <div class="bottom-decor">
+        <img src="Land.png" alt="Decoration">
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const entry = JSON.parse(localStorage.getItem("selectedEntry"));
+
+    if(entry){
+
+        // SHOW TEXT (this was missing)
+        document.getElementById("detailText").innerHTML = `
+            <div class="date">${entry.date}</div>
+            <div class="text">${entry.text}</div>
+        `;
+
+        // SHOW IMAGE WITH POLAROID
+        if(entry.image){
+            document.getElementById("detailImage").innerHTML =
+                `<div class="polaroid">
+                    <img src="${entry.image}">
+                </div>`;
+        }
+
+    }
+
+});
+</script>
+
+</body>
+</html>
