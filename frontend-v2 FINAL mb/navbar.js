@@ -34,7 +34,7 @@ function renderNavbar() {
               </div>
             `
             : `
-              <a href="landing.html">Explore</a>
+              <a href="landing.html">About</a>
               <a href="home.html">Home</a>
               <a href="login.html">Login</a>
               <a href="signup.html">Sign Up</a>
