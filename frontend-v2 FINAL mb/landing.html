@@ -17,10 +17,10 @@
     </a>
 
     <nav class="landing-navlinks">
-      <a href="#about">About</a>
-      <a href="#features">Features</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
+      <a href="landing.html" class="nav-link">About</a>
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="login.html" class="nav-link">Login</a>
+      <a href="signup.html" class="nav-link">Sign Up</a>
     </nav>
   </header>
 
@@ -120,6 +120,21 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    const currentPage = window.location.href.split("/").pop();
+
+    const links = document.querySelectorAll(".nav-link");
+
+    links.forEach(link => {
+      const linkPage = link.getAttribute("href");
+
+      if (
+        currentPage.includes(linkPage) ||
+        (currentPage === "" && linkPage === "landing.html")
+      ) {
+        link.classList.add("active");
+      }
+    });
   </script>
 </body>
 </html>
