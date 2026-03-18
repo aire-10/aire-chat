@@ -741,7 +741,6 @@ header#navbar {
   opacity: 0.92;
 }
 
-/* Make Mood Booster span full width like your screenshot */
 .dash-tools-grid .tool-btn:nth-child(3){
   grid-column: 1 / -1;
 }
@@ -785,7 +784,6 @@ a.dash-card:hover{
   flex: 1;
 }
 
-/* Big background panel like your screenshot */
 .chat-stage{
   width: 100%;
   margin: 0;
@@ -859,7 +857,7 @@ a.dash-card:hover{
 }
 
 .chat-left{
-  background: #f3eef1; /* or your preferred solid color */
+  background: #f3eef1;
   border-radius: 28px;
   padding: 22px;
 
@@ -1169,7 +1167,7 @@ body.chat-page {
 }
 
 body.chat-page .chat-wrap {
-  height: calc(100vh - 80px); /* adjust if your navbar height differs */
+  height: calc(100vh - 80px);
   overflow: hidden;
 }
 
@@ -2958,3 +2956,66 @@ header{
 .profile-dropdown.show{
   display: flex;
 }
+/* HOME — Mood check-in interactive elements */
+.dash-mood-emoji {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 4px;
+  transition: transform 0.15s;
+  user-select: none;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-mood-emoji:hover    { transform: scale(1.2); }
+.dash-mood-emoji.selected {
+  outline: 2.5px solid var(--btn);
+  background: rgba(45,92,40,0.12);
+  transform: scale(1.2);
+}
+.dash-mood-btn {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 999px;
+  border: none;
+  background: var(--btn);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, opacity 0.2s;
+}
+.dash-mood-btn:hover:not(:disabled) { background: var(--btn-hover); }
+.dash-mood-btn:disabled { background: rgba(45,92,40,0.35); cursor: not-allowed; }
+.dash-mood-saved {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sage);
+  min-height: 18px;
+  margin-top: 4px;
+}
+
+/* GROWTH — stage banner (compact, emoji only — no image) */
+.growth-summary-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.growth-stage-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 16px;
+  margin-top: 14px;
+}
+.growth-stage-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.growth-stage-info { display: flex; flex-direction: column; gap: 2px; }
+.growth-stage-name { font-size: 1rem; font-weight: 800; color: #1d2a19; }
+.growth-stage-sub  { font-size: 0.82rem; color: rgba(0,0,0,0.55); font-weight: 500; }
+
+/* day-right: streak only, no image */
+.day-right { flex-shrink: 0; display: flex; align-items: center; }
+.day-streak { font-size: 0.82rem; font-weight: 700; color: rgba(0,0,0,0.5); white-space: nowrap; }
