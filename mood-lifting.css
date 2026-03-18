@@ -1,0 +1,156 @@
+/* ─── MOOD LIFTING PAGE - CROSS-OFF STYLES ─── */
+
+/* Thought card styling */
+.thought-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  background: var(--glass, rgba(190, 210, 190, 0.52));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 18px;
+  padding: 28px 22px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.96rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--forest, #1a3520);
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.thought-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  background: rgba(210, 228, 210, 0.75);
+}
+
+/* Crossed-off state */
+.thought-card.crossed-off {
+  background: rgba(160, 190, 160, 0.75);
+  opacity: 0.85;
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Checkmark in top-right corner */
+.thought-card.crossed-off::after {
+  content: "✓";
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 2rem;
+  color: #2d5c28;
+  font-weight: 900;
+  opacity: 0.8;
+  text-shadow: 0 2px 4px rgba(255,255,255,0.5);
+  animation: popIn 0.3s ease;
+}
+
+/* Crossed-off text */
+.thought-card.crossed-off .thought-text {
+  text-decoration: line-through;
+  text-decoration-color: #2d5c28;
+  text-decoration-thickness: 2px;
+  text-decoration-style: solid;
+}
+
+/* Subtle pattern overlay when crossed off */
+.thought-card.crossed-off::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(45, 92, 40, 0.08) 0px,
+    rgba(45, 92, 40, 0.08) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  pointer-events: none;
+  border-radius: 18px;
+}
+
+/* Animation for checkmark */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
+
+/* Footer with reset button */
+.ml-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.ml-footer .btn-outline {
+  background: transparent;
+  color: var(--btn, #2d5c28);
+  border: 2px solid var(--btn, #2d5c28);
+  border-radius: 30px;
+  padding: 10px 30px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ml-footer .btn-outline:hover {
+  background: var(--btn, #2d5c28);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 92, 40, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .thought-card {
+    padding: 20px 15px;
+    font-size: 0.9rem;
+    min-height: 100px;
+  }
+  
+  .thought-card.crossed-off::after {
+    font-size: 1.6rem;
+    top: 8px;
+    right: 10px;
+  }
+}
+
+/* Counter badge (optional - shows how many thoughts completed) */
+.ml-counter {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: var(--forest, #1a3520);
+  font-weight: 500;
+  background: rgba(255,255,255,0.5);
+  padding: 5px 15px;
+  border-radius: 30px;
+  display: inline-block;
+}
+
+/* Ensure text wrapper works properly */
+.thought-text {
+  display: inline-block;
+  width: 100%;
+}

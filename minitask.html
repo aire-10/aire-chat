@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Mini-Tasks – Airé</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="booster.css">
+  <script src="navbar.js" defer></script>
+</head>
+<body class="minitask-page">
+
+  <!-- ── NAVBAR ── -->
+  <header id="navbar"></header>
+
+  <!-- ── Page Content ── -->
+  <div class="page-content">
+
+    <!-- Back button -->
+    <a href="moodbooster.html" class="btn-back">&#8592; Back to Mood Boosters</a>
+
+    <!-- Header -->
+    <div class="mt-header">
+      <div class="mt-header-text">
+        <h1>Quick Mini-Tasks</h1>
+        <p>Small steps, Big difference</p>
+      </div>
+      <img src="task.jpeg" alt="Tasks icon" class="mt-header-icon">
+    </div>
+
+    <!-- 3-column layout: Left Tasks | Center Card | Right Tasks -->
+    <div class="mt-layout">
+
+      <!-- Left column tasks -->
+      <div class="mt-col">
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Take 3 slow breaths</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="15">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Roll your shoulders back 10x</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="20">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Raise &amp; relax your eyebrows 5x</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="15">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Blink Slowly 5x</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="15">Start</button>
+        </div>
+
+      </div>
+
+      <!-- Center butterfly image card -->
+      <div class="mt-center-card">
+        <img src="daisybutterfly.png" alt="Butterfly">
+      </div>
+
+      <!-- Right column tasks -->
+      <div class="mt-col">
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Stretch your neck gently</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="15">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Sit up straight for 10 seconds</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="10">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Force a laugh for 30 seconds</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="30">Start</button>
+        </div>
+
+        <div class="task-card">
+          <div class="task-row">
+            <span class="task-leaf">🌿</span>
+            <span class="task-text">Force a smile for 20 seconds</span>
+          </div>
+          <button class="btn btn-green task-start-btn" data-duration="20">Start</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="booster.js"></script>
+  <script src="aire-data.js"></script>
+</body>
+</html>
