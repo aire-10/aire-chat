@@ -11,13 +11,14 @@
 
 <body class="chat-page">
 
+  
+  <!-- Dynamic navbar -->
+  <header id="navbar"></header>
+  
   <!-- (Optional but recommended) protect page -->
   <script>
     if (!localStorage.getItem("authToken")) window.location.href = "login.html";
   </script>
-
-  <!-- Dynamic navbar -->
-  <header id="navbar"></header>
 
   <main class="chat-wrap">
     <section class="chat-stage">

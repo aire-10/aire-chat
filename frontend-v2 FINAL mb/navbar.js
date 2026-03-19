@@ -23,6 +23,17 @@ function renderNavbar() {
               <a href="chat.html" class="nav-link">Airé</a>
               <a href="journal.html" class="nav-link">Journal</a>
 
+              <div class="nav-dropdown">
+                <button class="nav-dropbtn" type="button">Self Care ▾</button>
+                <div class="nav-dropdown-menu">
+                  <a href="grounding.html">Grounding</a>
+                  <a href="breathing-mt.html">Breathing</a>
+                  <a href="moodbooster.html">Mood Booster</a>
+                </div>
+              </div>
+
+              <a href="growth.html">Butterfly Pet</a>
+              
               <div class="nav-profile">
                 <img id="navProfilePic" src="profile.jpeg" alt="Profile"/>
 
@@ -49,8 +60,35 @@ function renderNavbar() {
   const dropdown = navbar.querySelector("#profileDropdown");
 
   if (profile && dropdown) {
-    profile.addEventListener("click", () => {
+    profile.addEventListener("click", (e) => {
+      e.stopPropagation(); // prevent immediate closing
       dropdown.classList.toggle("show");
+    });
+
+    // ✅ Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!profile.contains(e.target)) {
+        dropdown.classList.remove("show");
+      }
+    });
+  }
+
+  // Self Care dropdown (click instead of hover)
+  const selfCare = navbar.querySelector(".nav-dropdown");
+  const selfCareBtn = navbar.querySelector(".nav-dropbtn");
+  const selfCareMenu = navbar.querySelector(".nav-dropdown-menu");
+
+  if (selfCareBtn && selfCareMenu) {
+    selfCareBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selfCareMenu.classList.toggle("show");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!selfCare.contains(e.target)) {
+        selfCareMenu.classList.remove("show");
+      }
     });
   }
 
