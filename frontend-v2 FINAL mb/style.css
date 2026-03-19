@@ -98,6 +98,42 @@ header#navbar {
   color: var(--green);
 }
 
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  color: #333;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+/* Active page */
+.nav-link.active {
+  font-weight: 600;
+  color: #6FAF8F; /* soft green */
+}
+
+/* Underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: #6FAF8F;
+  transition: width 0.3s ease;
+}
+
+/* Hover effect */
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Active underline stays */
+.nav-link.active::after {
+  width: 100%;
+}
+
 /* Buttons */
 .btn{
   display: inline-flex;

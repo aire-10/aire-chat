@@ -19,9 +19,9 @@ function renderNavbar() {
         ${
           isLoggedIn
             ? `
-              <a href="home.html">Home</a>
-              <a href="chat.html">Airé</a>
-              <a href="journal.html">Journal</a>
+              <a href="home.html" class="nav-link">Home</a>
+              <a href="chat.html" class="nav-link">Airé</a>
+              <a href="journal.html" class="nav-link">Journal</a>
 
               <div class="nav-profile">
                 <img id="navProfilePic" src="profile.jpeg" alt="Profile"/>
@@ -34,10 +34,10 @@ function renderNavbar() {
               </div>
             `
             : `
-              <a href="landing.html">Explore</a>
-              <a href="home.html">Home</a>
-              <a href="login.html">Login</a>
-              <a href="signup.html">Sign Up</a>
+              <a href="landing.html" class="nav-link">About</a>
+              <a href="home.html" class="nav-link">Home</a>
+              <a href="login.html" class="nav-link">Login</a>
+              <a href="signup.html" class="nav-link">Sign Up</a>
             `
         }
       </nav>
@@ -88,4 +88,15 @@ function renderNavbar() {
     console.log("No profile photo found");
   }
 
+const currentPage = window.location.href.split("/").pop();
+
+const links = navbar.querySelectorAll(".nav-link");
+
+links.forEach(link => {
+  const linkPage = link.getAttribute("href");
+
+  if (currentPage.includes(linkPage)) {
+    link.classList.add("active");
+  }
+});
 }
