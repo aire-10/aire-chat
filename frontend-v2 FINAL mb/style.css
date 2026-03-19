@@ -804,6 +804,150 @@ a.dash-card:hover{
   padding: 80px 20px;
 }
 
+/* ===== NAVBAR (DYNAMIC) ===== */
+
+.landing-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #eee;
+}
+
+.landing-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 20px;
+  color: #2c4d3b;
+}
+
+.landing-logo img {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+}
+
+.landing-logo span {
+  color: #2c4d3b;
+}
+
+.landing-navlinks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.landing-navlinks a,
+.landing-navlinks a:visited {
+  text-decoration: none;
+  color: #2c4d3b;
+  font-weight: 600;
+}
+
+.landing-navlinks a:hover {
+  color: #4c7a60;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+  display: flex;
+  align-items: center;
+}
+
+.nav-dropbtn {
+  background: none;
+  border: none;
+
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+
+  color: #2c4d3b;
+
+  display: inline-flex;
+  align-items: center;
+
+  line-height: normal;
+  padding: 0;
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 34px;
+  left: 0;
+  min-width: 190px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  z-index: 999;
+}
+
+.nav-dropdown-menu a,
+.nav-dropdown-menu a:visited {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #2c4d3b;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.nav-dropdown-menu.show {
+  display: block;
+}
+
+.nav-profile {
+  position: relative;
+}
+
+.nav-profile img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 44px;
+  min-width: 160px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  padding: 8px 0;
+  z-index: 999;
+}
+
+.profile-dropdown a {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #2c4d3b;
+  font-weight: 500;
+}
+
+.profile-dropdown a:hover {
+  background: #f5f5f5;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
+
 /* =======================
    CHAT PAGE (AI BOT)
 ======================= */
@@ -3055,3 +3199,20 @@ header{
 /* day-right: streak only, no image */
 .day-right { flex-shrink: 0; display: flex; align-items: center; }
 .day-streak { font-size: 0.82rem; font-weight: 700; color: rgba(0,0,0,0.5); white-space: nowrap; }
+
+/* Match profile dropdown hover style */
+.nav-dropdown-menu a:hover {
+  background: #f5f5f5 !important;
+  border-radius: 8px;
+}
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.nav-dropdown-menu a:hover {
+  background: #f5f5f5;
+}
