@@ -23,6 +23,17 @@ function renderNavbar() {
               <a href="chat.html">Airé</a>
               <a href="journal.html">Journal</a>
 
+              <div class="nav-dropdown">
+                <button class="nav-dropbtn" type="button">Self Care ▾</button>
+                <div class="nav-dropdown-menu">
+                  <a href="grounding.html">Grounding</a>
+                  <a href="breathing-mt.html">Breathing</a>
+                  <a href="moodbooster.html">Mood Booster</a>
+                </div>
+              </div>
+
+              <a href="growth.html">Butterfly Pet</a>
+
               <div class="nav-profile">
                 <img id="navProfilePic" src="profile.jpeg" alt="Profile"/>
 
@@ -44,7 +55,6 @@ function renderNavbar() {
     </div>
   `;
 
-  /* Dropdown behaviour */
   const profile = navbar.querySelector(".nav-profile");
   const dropdown = navbar.querySelector("#profileDropdown");
 
@@ -54,7 +64,6 @@ function renderNavbar() {
     });
   }
 
-  /* Logout */
   const logout = navbar.querySelector("#logoutNav");
   if (logout) {
     logout.addEventListener("click", () => {
@@ -63,7 +72,6 @@ function renderNavbar() {
     });
   }
 
-  /* Hotline */
   const hotline = navbar.querySelector("#hotlineBtn");
   if (hotline) {
     hotline.addEventListener("click", () => {
@@ -75,7 +83,6 @@ function renderNavbar() {
     });
   }
 
-  /* Load user's profile photo into navbar */
   const navPic = navbar.querySelector("#navProfilePic");
 
   try {
@@ -87,5 +94,4 @@ function renderNavbar() {
   } catch (e) {
     console.log("No profile photo found");
   }
-
 }
