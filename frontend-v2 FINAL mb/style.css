@@ -2187,13 +2187,23 @@ body.chat-page .chat-stage {
    Growth History Page
 ======================= */
 .growth-wrap{
+  flex: 1;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 46px 22px 70px;
+  padding: 20px 22px;
+  flex: 1;
 }
 
-.growth-head{
-  margin: 10px 0 18px;
+.growth-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.back-btn {
+  margin-bottom: 50px;
+  display: inline-block;
 }
 
 .growth-title{
@@ -2260,6 +2270,7 @@ body.chat-page .chat-stage {
   padding: 18px 10px 8px;
   display: grid;
   gap: 12px;
+  overflow-y: auto;
 }
 
 .day-card{
@@ -2327,7 +2338,7 @@ body.chat-page .chat-stage {
 }
 
 .account-block{
-  max-height: 520px;
+  max-height: 545px;
   overflow-y: auto;
   padding-right: 6px;
   text-align: left;
