@@ -44,8 +44,8 @@
          alt="Butterfly Decoration"
          style="
             position:absolute;
-            bottom:-20px;
-            right:-50px;
+            bottom:-45px;
+            right:-90px;
             width:220px;
             pointer-events:none;
          ">
@@ -86,11 +86,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     <button class="delete-btn">Delete</button>
                 `;
 
-                // Click to open detail
-                card.querySelector(".entry-text").onclick = function() {
+                // Click to open detail;
+                card.style.cursor = "pointer";
+
+                card.addEventListener("mousedown", () => {
                     localStorage.setItem("selectedEntry", JSON.stringify(entry));
                     window.location.href = "journal-detail.html";
-                };
+                });
 
                 // Delete function
                 card.querySelector(".delete-btn").onclick = function(e) {
