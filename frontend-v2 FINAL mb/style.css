@@ -3049,6 +3049,10 @@ body {
     position: relative;
 }
 
+.entry-card img {
+  pointer-events: none;
+}
+
 .delete-btn{
     position:absolute;
     top:10px;
