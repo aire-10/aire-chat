@@ -89,14 +89,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Click to open detail;
                 card.style.cursor = "pointer";
 
-                card.addEventListener("mousedown", () => {
+                card.addEventListener("click", () => {
                     localStorage.setItem("selectedEntry", JSON.stringify(entry));
                     window.location.href = "journal-detail.html";
                 });
 
                 // Delete function
-                card.querySelector(".delete-btn").onclick = function(e) {
-                    e.stopPropagation();
+                card.querySelector(".delete-btn").addEventListener("click", function(e) {
+                    e.stopPropagation(); // stop card click
 
                     const confirmDelete = confirm("Are you sure you want to delete this journal entry?");
                     
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         saveEntries();
                         renderEntries();
                     }
-                };
+                });
 
                 container.appendChild(card);
             });
