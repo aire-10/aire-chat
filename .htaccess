@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # redirect root to frontend index if no file exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^$ /frontend/index.html [L,R=302]
+
+  # API routes should not be rewritten to frontend
+  RewriteRule ^api/(.*)$ /api/index.php [L,QSA]
+
+  # fallback all missing routes to frontend index (single-page style)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ /frontend/$1 [L,QSA]
+</IfModule>

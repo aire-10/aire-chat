@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gentle Mind Reset – Airé</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="../js/db.js"></script>
+  <link rel="stylesheet" href="../css/booster.css">
+  <link rel="stylesheet" href="../css/cross-off.css">
+  <script src="../js/navbar.js" defer></script>
+  <style>
+    /* Page-specific styles */
+    .mr-header {
+      margin-bottom: 22px;
+      position: relative;
+    }
+    
+    .mr-item {
+      background: var(--card, rgba(255,255,255,0.88));
+      border-radius: 13px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      transition: all 0.2s;
+    }
+    
+    .mr-item:hover {
+      background: rgba(255,255,255,0.96);
+      transform: translateX(4px);
+    }
+    
+    .mr-item .cross-off-text {
+      flex: 1;
+    }
+    
+    /* Override default checkmark position for list items */
+    .mr-item.crossed-off::after {
+      top: 50%;
+      transform: translateY(-50%);
+      right: 15px;
+      font-size: 1.3rem;
+    }
+    
+    /* Ensure the icon stays visible */
+    .mr-item-icon {
+      font-size: 1.1rem;
+      z-index: 2;
+      position: relative;
+    }
+    
+    /* Keep the pattern overlay */
+    .mr-item.crossed-off::before {
+      border-radius: 13px;
+    }
+    
+    /* Butterfly decorations */
+    .mr-butterfly-tl {
+      position: absolute;
+      top: -20px;
+      right: 30px;
+      width: 110px;
+      object-fit: contain;
+      pointer-events: none;
+      opacity: 0.93;
+      z-index: 1;
+    }
+    
+    .mr-butterfly-br {
+      position: fixed;
+      bottom: 18px;
+      right: 22px;
+      width: 78px;
+      object-fit: contain;
+      pointer-events: none;
+      opacity: 0.9;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body class="mindreset-page">
+
+  <!-- ── NAVBAR ── -->
+  <header id="navbar"></header>
+
+  <!-- ── Page Content ── -->
+  <div class="page-content" style="position: relative;">
+
+    <!-- Back button -->
+    <a href="moodbooster.html" class="btn-back">&#8592; Back to Mood Boosters</a>
+
+    <!-- Header with counter (counter will be added by JS) -->
+    <div class="mr-header">
+      <h1>Gentle Mind Reset</h1>
+      <p>Even small resets count</p>
+    </div>
+
+    <!-- Two-column layout: list + reminder card -->
+    <div class="mr-layout">
+
+      <!-- Left: 7 mindful items with cross-off feature -->
+      <div class="mr-list">
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Look at something green</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Find one thing you're grateful for</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Think of one small thing you did well today</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Notice one sound around you</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Feel your heartbeat for 10 seconds</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Smile softly (even if it's silly)</span>
+        </div>
+        <div class="mr-item cross-off-item">
+          <span class="mr-item-icon">🌿</span>
+          <span class="cross-off-text">Take one deep breath and sigh it out</span>
+        </div>
+      </div>
+
+      <!-- Right: Reminder card -->
+      <div class="mr-side">
+        <div class="mr-reminder-card">
+          <img src="../images/mindreset.jpeg" alt="Mind Reset spiral">
+          <p>Slow down<br>Calm your thoughts</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Reset button -->
+    <div class="cross-off-footer">
+      <button class="btn-outline cross-off-reset-btn">Reset All Items</button>
+    </div>
+
+  </div>
+
+  <!-- Bottom-right butterfly decoration -->
+  <img src="../images/logo.png" alt="Butterfly" class="mr-butterfly-br">
+
+  <script src="../js/booster.js"></script>
+  <!-- <script src="../js/cross-off.js"></script> -->
+  <!-- <script>
+    // Initialize cross-off feature for Mind Reset page
+    document.addEventListener('DOMContentLoaded', () => {
+      initCrossOff('mind-reset');
+    });
+  </script> -->
+  <script src="../js/progress.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    checkDailyReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    scheduleMidnightReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    initProgress({
+      selector: ".mr-item",
+      storageKey: "mindreset-progress",
+      activeClass: "done"
+    });
+
+    // ✅ RESET BUTTON HANDLER
+    const resetBtn = document.querySelector(".cross-off-reset-btn");
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+
+        // Remove visual states
+        document.querySelectorAll(".mr-item").forEach(item => {
+          item.classList.remove("done");
+        });
+
+        // Clear saved progress
+        localStorage.removeItem("mindreset-progress");
+      });
+    }
+
+  });
+  </script>
+  <script src="../js/aire-data.js"></script>
+</body>
+</html>
+
+
+
+

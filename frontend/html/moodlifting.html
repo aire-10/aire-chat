@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood Lifting Thoughts – Airé</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="../js/db.js"></script>
+  <link rel="stylesheet" href="../css/booster.css">
+  <link rel="stylesheet" href="../css/cross-off.css">
+  <script src="../js/navbar.js" defer></script>
+  <style>
+    /* Page-specific styles */
+    .ml-header {
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .thought-card {
+      background: var(--glass, rgba(190, 210, 190, 0.52));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 18px;
+      padding: 28px 22px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.96rem;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--forest, #1a3520);
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .thought-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      background: rgba(210, 228, 210, 0.75);
+    }
+    
+    /* Ensure checkmark doesn't overlap text on small cards */
+    .thought-card.crossed-off {
+      padding-right: 35px;
+    }
+  </style>
+</head>
+
+<body class="moodlifting-page">
+
+  <!-- ── NAVBAR ── -->
+  <header id="navbar"></header>
+
+  <!-- ── Page Content ── -->
+  <div class="page-content">
+
+    <!-- Back button -->
+    <a href="moodbooster.html" class="btn-back">&#8592; Back to Mood Boosters</a>
+
+    <!-- Header with counter (counter will be added by JS) -->
+    <div class="ml-header">
+      <h1>Mood Lifting Thoughts</h1>
+      <span class="ml-header-emoji">❄️</span>
+      <img src="../images/moodlifting.jpeg" alt="Mood Lifting" class="ml-header-icon">
+    </div>
+
+    <!-- 3×2 Frosted Glass Cards with cross-off feature -->
+    <div class="ml-grid">
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">Recall a happy memory</span>
+      </div>
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">Think of your favourite food</span>
+      </div>
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">You're still here.<br>That's enough.</span>
+      </div>
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">What's one thing you did okay today?</span>
+      </div>
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">Tell yourself: "This feeling is okay, and it will pass."</span>
+      </div>
+      <div class="thought-card cross-off-item">
+        <span class="cross-off-text">If you're tired, what's one tiny rest you can take?</span>
+      </div>
+    </div>
+
+    <!-- Reset button -->
+    <div class="cross-off-footer">
+      <button class="btn-outline cross-off-reset-btn">Reset All Thoughts</button>
+    </div>
+
+  </div>
+
+  <!-- Butterfly decoration bottom-right -->
+  <img src="../images/logo.png" alt="Butterfly" class="ml-butterfly">
+
+  <script src="../js/booster.js"></script>
+  <!-- <script src="../js/cross-off.js"></script> -->
+  <script>
+    // Initialize cross-off feature for Mood Lifting page
+    document.addEventListener('DOMContentLoaded', () => {
+      // initCrossOff('mood-lifting');
+    });
+  </script>
+  <script src="../js/progress.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    checkDailyReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    scheduleMidnightReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    initProgress({
+      selector: ".thought-card",
+      storageKey: "moodlifting-progress",
+      activeClass: "crossed-off"
+    });
+
+    // ✅ ADD THIS
+    const resetBtn = document.querySelector(".cross-off-reset-btn");
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+
+        document.querySelectorAll(".thought-card").forEach(item => {
+          item.classList.remove("crossed-off");
+        });
+
+        localStorage.removeItem("moodlifting-progress");
+      });
+    }
+
+  });
+  </script>
+  <script src="../js/aire-data.js"></script>
+</body>
+</html>
+
+
+
+

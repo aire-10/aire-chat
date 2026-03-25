@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airé • Create Account</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="../js/db.js"></script>
+  <script src="../js/navbar.js" defer></script>
+  <script src="../js/signup.js"></script>
+</head>
+
+<body class="auth-body">
+
+  <header id="navbar"></header>
+
+  <main class="auth-wrapper">
+    <section class="auth-card">
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Start your journey with Airé 🌿</p>
+
+      <form class="auth-form" id="signupForm">
+        <div class="auth-field">
+          <label for="name">Full Name</label>
+          <input id="name" name="name" type="text" placeholder="e.g. Ainaa Roslan" required />
+        </div>
+
+        <div class="auth-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="e.g. ainaa@email.com" required />
+        </div>
+
+        <div class="auth-grid-2">
+          <div class="auth-field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Create a password" required />
+          </div>
+
+          <div class="auth-field">
+            <label for="confirm">Confirm Password</label>
+            <input id="confirm" name="confirm" type="password" placeholder="Repeat password" required />
+          </div>
+        </div>
+
+        <label class="auth-check">
+          <input type="checkbox" required />
+          <span>I agree to the Terms & Privacy Policy</span>
+        </label>
+
+        <button type="submit" class="auth-btn">Create Account</button>
+
+        <p class="auth-foot">
+          Already have an account?
+          <a href="login.html">Login</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
