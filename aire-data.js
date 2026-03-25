@@ -1,171 +1,260 @@
-// ── aire-data.js ── shared data layer for Airé app ──
-// Persists in localStorage. Import on every page that reads/writes mood/bond data.
+/* ================================================================
+   aire-data.js  —  Unified data layer for Airé
+   Storage key: "aire_mood_log"
+   Each entry: { date: "YYYY-MM-DD", mood: string, note: string, ts: ISO }
+   Multiple entries per day are ALL stored (not overwritten)
+   ================================================================ */
 
-const AireData = {
+const AireData = (() => {
 
-  // ── POSITIVE / NEGATIVE MOOD SETS ──
-  POSITIVE: ['happy', 'joyful'],
-  BREAKING: ['neutral', 'anxious', 'sad', 'tired', 'content'],
+  const MOOD_LOG_KEY = "aire_mood_log";
+  const DAYS_KEY     = "aire_days_tracked"; // array of unique date strings
 
-  // ── MOOD LOG ──
-  getMoodLog() {
-    return JSON.parse(localStorage.getItem('aire_mood_log') || '[]');
-  },
+  /* Mood string sets */
+  const POSITIVE = ["happy", "joyful"];
+  const NEGATIVE = ["anxious", "sad", "tired", "neutral"];
 
-  // Save a mood for today (overwrites if already checked in today)
-  logMood(mood, note) {
+  /* Mood → display label + emoji */
+  const MOOD_META = {
+    joyful:  { label: "Joyful",  emoji: "😄" },
+    happy:   { label: "Happy",   emoji: "😊" },
+    neutral: { label: "Neutral", emoji: "😐" },
+    anxious: { label: "Anxious", emoji: "😰" },
+    sad:     { label: "Sad",     emoji: "😔" },
+    tired:   { label: "Tired",   emoji: "😩" },
+    content: { label: "Content", emoji: "🙂" },
+  };
 
-    const log = this.getMoodLog();
-    const today = this.today();
+  /* Butterfly stage definitions */
+  const STAGES = {
+    egg:         { label: "Egg",         img: "assets/butterfly/egg.png"            },
+    pupa:        { label: "Pupa",        img: "assets/butterfly/pupa.png"           },
+    caterpillar: { label: "Caterpillar", img: "assets/butterfly/catepillar.png"     },
+    butterfly:   { label: "Butterfly",   img: "assets/butterfly/daisybutterfly.png" },
+    surviving:   { label: "Surviving",   img: "surviving.jpeg"                      },
+    struggling:  { label: "Struggling",  img: "struggling.jpeg"                     },
+  };
 
-    const idx = log.findIndex(e => e.date === today);
+  /* ── Helpers ──────────────────────────────────────── */
+  function todayStr() {
+    return new Date().toISOString().split("T")[0];
+  }
 
-    if (idx >= 0) {
-      log[idx].mood = mood;
-      log[idx].note = note;
-    } else {
-      log.push({
-        date: today,
-        mood: mood,
-        note: note || ""
-      });
-    }
+  function load(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch { return fallback; }
+  }
 
-    localStorage.setItem("aire_mood_log", JSON.stringify(log));
+  function save(key, val) {
+    localStorage.setItem(key, JSON.stringify(val));
+  }
 
-    this.addBondDay(today);
-  },
+  /* ── Stage key from streak + previous stage ───────── */
+  function stageKeyFromStreak(streak, prevStageKey, latestMood) {
+    const isNeg = NEGATIVE.includes(latestMood);
+    const prev  = prevStageKey || "egg";
 
-  // ── STREAK ──
-  // Streak = number of positive check-ins after the most recent negative one
-  // (skipped days do NOT break the streak; only an explicit negative check-in does)
-  getStreak() {
-    const log = this.getMoodLog();
+    if (prev === "butterfly" && isNeg)   return "surviving";
+    if (prev === "struggling" && !isNeg) return "surviving";
+    if (prev === "surviving"  && streak >= 5) return "butterfly";
+
+    if (streak === 0) return "egg";
+    if (streak <= 2)  return "pupa";
+    if (streak <= 4)  return "caterpillar";
+    return "butterfly";
+  }
+
+  /* ── Streak: consecutive positive days (latest mood per day) ──
+     Skipped days don't break streak; explicit negative does.     */
+  function calcStreak(log) {
     if (!log.length) return 0;
-
-    const sorted = [...log].sort((a, b) => a.date.localeCompare(b.date));
-
-    // Find the most recent negative check-in
-    let lastNegativeIdx = -1;
-    for (let i = sorted.length - 1; i >= 0; i--) {
-      if (!this.POSITIVE.includes(sorted[i].mood)) {
-        lastNegativeIdx = i;
-        break;
-      }
-    }
-
-    // Count positives after that point
+    const byDay = {};
+    log.forEach(e => {
+      if (!byDay[e.date] || e.ts > byDay[e.date].ts) byDay[e.date] = e;
+    });
+    const days = Object.keys(byDay).sort().reverse();
     let streak = 0;
-    for (let i = lastNegativeIdx + 1; i < sorted.length; i++) {
-      if (this.POSITIVE.includes(sorted[i].mood)) streak++;
+    for (const day of days) {
+      if (POSITIVE.includes(byDay[day].mood)) streak++;
+      else break;
     }
     return streak;
-  },
+  }
 
-  // ── HEALTH STATUS (from streak) ──
-  getHealth() {
-    const s = this.getStreak();
-    if (s >= 3) return 'Excelling';
-    if (s === 2) return 'Thriving';
-    if (s === 1) return 'Surviving';
-    return 'Struggling';
-  },
+  /* ── Stage key: walk days oldest→newest, track stage transitions ── */
+  function calcStageKey(log) {
+    if (!log.length) return "egg";
+    const byDay = {};
+    log.forEach(e => {
+      if (!byDay[e.date] || e.ts > byDay[e.date].ts) byDay[e.date] = e;
+    });
+    const days = Object.keys(byDay).sort();
+    let stageKey = "egg";
+    let streak   = 0;
+    days.forEach(day => {
+      const mood = byDay[day].mood;
+      if (POSITIVE.includes(mood)) streak++;
+      else streak = 0;
+      stageKey = stageKeyFromStreak(streak, stageKey, mood);
+    });
+    return stageKey;
+  }
 
-  // ── MOOD REFLECTED ──
-  // Latest mood from the current streak window (positive moods preferred)
-  getMoodReflected() {
-    const labels = {
-      happy:   'Happy',
-      joyful:  'Calm & Joyful',
-      content: 'Content',
-      neutral: 'Neutral',
-      anxious: 'Anxious',
-      sad:     'Sad',
-      tired:   'Tired'
-    };
-    const m = this.getLatestMood();
-    return m ? (labels[m] || m) : '—';
-  },
+  /* ════════════════════════════════════════════════════
+     PUBLIC API
+  ════════════════════════════════════════════════════ */
 
-  // ── BOND LEVEL ──
-  addBondDay(date) {
-    date = date || this.today();
-    const days = JSON.parse(localStorage.getItem('aire_bond_days') || '[]');
-    if (!days.includes(date)) {
-      days.push(date);
-      localStorage.setItem('aire_bond_days', JSON.stringify(days));
-    }
-  },
+  /**
+   * Log a mood. Multiple calls per day are all stored.
+   * Compatible with breathing-mt.js: logMood(moodString, noteString)
+   */
+  function logMood(mood, note) {
+    const log   = load(MOOD_LOG_KEY, []);
+    const today = todayStr();
+    const ts    = new Date().toISOString();
+    log.push({ date: today, mood, note: note || "", ts });
+    save(MOOD_LOG_KEY, log);
 
-  getBondDays() {
-    return JSON.parse(localStorage.getItem('aire_bond_days') || '[]').length;
-  },
+    /* Track unique days */
+    const days = new Set(load(DAYS_KEY, []));
+    days.add(today);
+    save(DAYS_KEY, [...days]);
 
-  getBondLevel() {
-    const n = this.getBondDays();
-    if (n >= 14) return 'High';
-    if (n >= 7)  return 'Medium';
-    return 'Low';
-  },
+    return { streak: calcStreak(log), stageKey: calcStageKey(log) };
+  }
 
-  // ── BUTTERFLY TEXT (for home page card) ──
-  getButterflyMessage() {
+  /* Raw log array — used by breathing-mt.js and growth.js */
+  function getMoodLog() {
+    return load(MOOD_LOG_KEY, []);
+  }
+
+  function getStreak()    { return calcStreak(getMoodLog()); }
+  function getStageKey()  { return calcStageKey(getMoodLog()); }
+  function getStageInfo() { return STAGES[getStageKey()] || STAGES.egg; }
+
+  /* Unique days the user has logged a mood */
+  function getDaysTracked() {
+    return new Set(load(DAYS_KEY, [])).size;
+  }
+
+  /* Latest mood string e.g. "joyful" */
+  function getLatestMood() {
+    const log = getMoodLog();
+    if (!log.length) return null;
+    return log.reduce((a, b) => (a.ts > b.ts ? a : b)).mood;
+  }
+
+  /* Latest full entry object */
+  function getLatestEntry() {
+    const log = getMoodLog();
+    if (!log.length) return null;
+    return log.reduce((a, b) => (a.ts > b.ts ? a : b));
+  }
+
+  /* Total mood logs for today (all check-ins, not just one) */
+  function getTodayCheckInCount() {
+    const today = todayStr();
+    return getMoodLog().filter(e => e.date === today).length;
+  }
+
+  /* Human-readable mood label */
+  function getMoodReflected() {
+    const m = getLatestMood();
+    return m ? (MOOD_META[m]?.label || m) : "—";
+  }
+
+  /* Health label = stage name */
+  function getHealth() {
+    return getStageInfo().label;
+  }
+
+  /* Message for home breathe card */
+  function getButterflyMessage() {
     const msgs = {
-      Excelling: 'Your butterfly is soaring and radiant today.',
-      Thriving:  'Your butterfly is vibrant and thriving today.',
-      Surviving: 'Your butterfly is glowing softly today.',
-      Struggling: 'Your butterfly needs some gentle love today.'
+      egg:         "Your journey is just beginning. 🥚",
+      pupa:        "You're growing in your own quiet way. 🌱",
+      caterpillar: "Every step forward matters. 🌿",
+      butterfly:   "Your butterfly is glowing softly today. 🦋",
+      surviving:   "It's okay to rest. You're still here. 💚",
+      struggling:  "Hard days are part of the journey too. 🌧️",
     };
-    return msgs[this.getHealth()];
-  },
+    return msgs[getStageKey()] || msgs.egg;
+  }
 
-  // ── BUTTERFLY CSS CLASS (drives image filter on profile & home) ──
-  getButterflyClass() {
-    return 'butterfly-' + this.getHealth().toLowerCase();
-    // butterfly-excelling / butterfly-thriving / butterfly-surviving / butterfly-struggling
-  },
+  /* CSS class for image filter — profile.css uses butterfly-excelling etc. */
+  function getButterflyClass() {
+    const map = {
+      egg:         "butterfly-struggling",
+      pupa:        "butterfly-surviving",
+      caterpillar: "butterfly-thriving",
+      butterfly:   "butterfly-excelling",
+      surviving:   "butterfly-surviving",
+      struggling:  "butterfly-struggling",
+    };
+    return map[getStageKey()] || "butterfly-struggling";
+  }
 
-  // ── GROWTH HISTORY (last 14 mood log entries, sorted newest first) ──
-  getGrowthHistory() {
-    return [...this.getMoodLog()]
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .slice(0, 14);
-  },
+  /* Stage key string — used by profilebutterfly.js */
+  function getButterflyStage() {
+    return getStageKey();
+  }
 
-  // ── HELPERS ──
-  today() {
-    return new Date().toISOString().split('T')[0];
-  },
+  /* Bond days = days tracked (backward compat for profilebutterfly.js) */
+  function getBondDays()  { return getDaysTracked(); }
+  function getBondLevel() {
+    const n = getBondDays();
+    if (n >= 14) return "High";
+    if (n >= 7)  return "Medium";
+    return "Low";
+  }
 
-  getLatestMood() {
+  /* addBondDay — kept for breathing-mt.js compatibility */
+  function addBondDay(date) {
+    date = date || todayStr();
+    const days = new Set(load(DAYS_KEY, []));
+    days.add(date);
+    save(DAYS_KEY, [...days]);
+  }
 
-  const log = this.getMoodLog();
+  /* Growth history — one record per day (latest mood), newest first */
+  function getGrowthHistory() {
+    const log   = getMoodLog();
+    const byDay = {};
+    log.forEach(e => {
+      if (!byDay[e.date] || e.ts > byDay[e.date].ts) byDay[e.date] = e;
+    });
+    return Object.entries(byDay)
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([date, e]) => ({ date, mood: e.mood, note: e.note, ts: e.ts }));
+  }
 
-  if (!log.length) return null;
+  /* Expose everything */
+  return {
+    logMood,
+    getMoodLog,
+    getStreak,
+    getStageKey,
+    getStageInfo,
+    getDaysTracked,
+    getLatestMood,
+    getLatestEntry,
+    getTodayCheckInCount,
+    getMoodReflected,
+    getHealth,
+    getButterflyMessage,
+    getButterflyClass,
+    getButterflyStage,
+    getGrowthHistory,
+    addBondDay,
+    getBondDays,
+    getBondLevel,
+    POSITIVE,
+    NEGATIVE,
+    MOOD_META,
+    STAGES,
+    today: () => todayStr(),
+  };
 
-  const sorted = [...log].sort((a,b)=>b.date.localeCompare(a.date));
-
-  return sorted[0].mood;
-
-},
-
-getButterflyStage() {
-
-  const streak = this.getStreak();
-  const bond = this.getBondDays();
-  const health = this.getHealth();
-
-  // Struggling butterfly
-  if (health === "Struggling") return "sick";
-
-  if (streak === 1) return "egg";
-  if (streak === 2) return "caterpillar";
-  if (streak === 3) return "pupa";
-  if (streak === 4) return "emerging";
-
-  if (streak >= 5 && bond < 7) return "butterfly";
-  if (streak >= 5 && bond >= 7) return "adult_glow";
-
-  return "egg";
-}
-};
+})();

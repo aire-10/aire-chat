@@ -114,5 +114,29 @@
 
   <script src="booster.js"></script>
   <script src="aire-data.js"></script>
+  <script src="progress.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    checkDailyReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+
+    scheduleMidnightReset([
+      "minitasks-progress",
+      "bodybooster-progress",
+      "mindreset-progress",
+      "moodlifting-progress"
+    ]);
+    
+    initProgress({
+      selector: ".task-card",
+      storageKey: "minitasks-progress",
+      activeClass: "completed"
+    });
+  });
+  </script>
 </body>
 </html>

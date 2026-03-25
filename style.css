@@ -98,6 +98,42 @@ header#navbar {
   color: var(--green);
 }
 
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  color: #333;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+/* Active page */
+.nav-link.active {
+  font-weight: 600;
+  color: #6FAF8F; /* soft green */
+}
+
+/* Underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: #6FAF8F;
+  transition: width 0.3s ease;
+}
+
+/* Hover effect */
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Active underline stays */
+.nav-link.active::after {
+  width: 100%;
+}
+
 /* Buttons */
 .btn{
   display: inline-flex;
@@ -741,7 +777,6 @@ header#navbar {
   opacity: 0.92;
 }
 
-/* Make Mood Booster span full width like your screenshot */
 .dash-tools-grid .tool-btn:nth-child(3){
   grid-column: 1 / -1;
 }
@@ -821,16 +856,28 @@ a.dash-card:hover{
 .nav-dropdown {
   position: relative;
   display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .nav-dropbtn {
   background: none;
   border: none;
-  color: #2c4d3b;
-  font: inherit;
+
+  font-size: 16px;
   font-weight: 600;
-  cursor: pointer;
+  font-family: inherit;
+
+  color: #2c4d3b;
+
+  display: inline-flex;
+  align-items: center;
+
+  line-height: normal;
   padding: 0;
+  margin: 0;
+
+  cursor: pointer;
 }
 
 .nav-dropdown-menu {
@@ -856,11 +903,7 @@ a.dash-card:hover{
   font-weight: 500;
 }
 
-.nav-dropdown-menu a:hover {
-  background: #f5f5f5;
-}
-
-.nav-dropdown:hover .nav-dropdown-menu {
+.nav-dropdown-menu.show {
   display: block;
 }
 
@@ -905,125 +948,6 @@ a.dash-card:hover{
   display: block;
 }
 
-
-
-/* ===== NAVBAR DROPDOWN (Self Care) ===== */
-
-.nav-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.nav-dropbtn {
-  background: none;
-  border: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  padding: 0;
-}
-
-.nav-dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 28px;
-  left: 0;
-  min-width: 180px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
-  z-index: 999;
-}
-
-.nav-dropdown-menu a {
-  display: block;
-  padding: 10px 16px;
-  text-decoration: none;
-  color: #333;
-  white-space: nowrap;
-}
-
-.nav-dropdown-menu a:hover {
-  background: #f5f5f5;
-}
-
-.nav-dropdown:hover .nav-dropdown-menu {
-  display: block;
-}
-
-/* ===== FORCE NAVBAR LINK STYLE FIX ===== */
-
-.landing-navlinks a {
-  text-decoration: none !important;
-  color: #2c4d3b !important;
-  font-weight: 600;
-}
-
-.landing-navlinks a:visited {
-  color: #2c4d3b !important;
-}
-
-.landing-navlinks a:hover {
-  color: #4c7a60 !important;
-}
-
-.nav-dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 35px;
-  left: 0;
-  min-width: 180px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  padding: 8px 0;
-  z-index: 999;
-}
-
-.nav-dropdown-menu a {
-  display: block;
-  padding: 10px 16px;
-  color: #2c4d3b;
-}
-
-.nav-dropdown-menu a:hover {
-  background: #f3f3f3;
-}
-
-/* ===== FINAL NAVBAR OVERRIDE ===== */
-
-#navbar .landing-navbar a,
-#navbar .landing-navbar a:visited,
-#navbar .landing-navbar a:active {
-  color: #2c4d3b !important;
-  text-decoration: none !important;
-}
-
-#navbar .landing-navbar a:hover {
-  color: #4c7a60 !important;
-  text-decoration: none !important;
-}
-
-#navbar .nav-dropbtn {
-  background: none !important;
-  border: none !important;
-  color: #2c4d3b !important;
-  font: inherit !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  text-decoration: none !important;
-}
-
-#navbar .nav-dropdown-menu a,
-#navbar .nav-dropdown-menu a:visited,
-#navbar .nav-dropdown-menu a:active {
-  color: #2c4d3b !important;
-  text-decoration: none !important;
-}
-
-
-
 /* =======================
    CHAT PAGE (AI BOT)
 ======================= */
@@ -1040,7 +964,6 @@ a.dash-card:hover{
   flex: 1;
 }
 
-/* Big background panel like your screenshot */
 .chat-stage{
   width: 100%;
   margin: 0;
@@ -1114,7 +1037,7 @@ a.dash-card:hover{
 }
 
 .chat-left{
-  background: #f3eef1; /* or your preferred solid color */
+  background: #f3eef1;
   border-radius: 28px;
   padding: 22px;
 
@@ -1284,10 +1207,11 @@ a.dash-card:hover{
 /* input bar */
 .chat-inputbar{
   width: 100%;
+  height: 72px;
   margin-top: 10px;
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
   background: rgba(255,255,255,0.70);
   padding: 10px;
   border-radius: 16px;
@@ -1296,15 +1220,19 @@ a.dash-card:hover{
 
 .chat-inputbar input{
   flex: 1;          /* THIS makes it expand */
-  padding: 14px 18px;
+  padding: 0 18px;
   border-radius: 16px;
   border: none;
   outline: none;
   font-size: 15px;
+  box-sizing: border-box;
 }
 
 .send-btn{
   min-width: 100px;
+  height : 52px;
+  margin-top: -0px;
+  align-self: center;
   border: none;
   cursor: pointer;
   border-radius: 12px;
@@ -1424,7 +1352,7 @@ body.chat-page {
 }
 
 body.chat-page .chat-wrap {
-  height: calc(100vh - 80px); /* adjust if your navbar height differs */
+  height: calc(100vh - 80px);
   overflow: hidden;
 }
 
@@ -2259,13 +2187,23 @@ body.chat-page .chat-stage {
    Growth History Page
 ======================= */
 .growth-wrap{
+  flex: 1;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 46px 22px 70px;
+  padding: 20px 22px;
+  flex: 1;
 }
 
-.growth-head{
-  margin: 10px 0 18px;
+.growth-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.back-btn {
+  margin-bottom: 50px;
+  display: inline-block;
 }
 
 .growth-title{
@@ -2332,6 +2270,7 @@ body.chat-page .chat-stage {
   padding: 18px 10px 8px;
   display: grid;
   gap: 12px;
+  overflow-y: auto;
 }
 
 .day-card{
@@ -2399,7 +2338,7 @@ body.chat-page .chat-stage {
 }
 
 .account-block{
-  max-height: 520px;
+  max-height: 545px;
   overflow-y: auto;
   padding-right: 6px;
   text-align: left;
@@ -2647,7 +2586,7 @@ button{
 .butterfly-bottom{
     position:absolute;
     bottom:-50px;
-    right:0;
+    left: 970px;
 }
 
 .butterfly-bottom img{
@@ -2771,14 +2710,18 @@ body{
 }
 
 /* BACK BUTTON */
+.top-bar{
+    margin-bottom: 20px;
+}
+
 .back-btn{
     display:inline-block;
-    background:#E6E6E6;
-    padding:8px 20px;
+    background:#E5E5E5;
+    padding:10px 18px;
     border-radius:20px;
+    font-size:14px;
     text-decoration:none;
     color:#333;
-    margin-bottom:30px;
 }
 
 .back-btn:hover{
@@ -2790,39 +2733,43 @@ body{
     display:flex;
     align-items:center;
     gap:15px;
-    margin-bottom:40px;
+    margin-bottom:30px;
 }
 
 .title-row h1{
-    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family:'Baskervville';
     font-size:28px;
     margin:0;
+    white-space:nowrap;   /* ✅ FIX */
 }
 
 .title-row img{
-    width:60px;
+    width:40px;
+    height:auto;
 }
 
 /* CONTENT LAYOUT */
 .detail-layout{
     display:flex;
-    gap:40px;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:60px;
+}
+
+.container{
+    position: relative;
+    padding: 40px 60px;
 }
 
 .detail-left{
-    width:60%;
+    width:500px;
 }
 
 .detail-right{
-    width:40%;
+    flex:1;
     display:flex;
     justify-content:center;
     align-items:flex-start;
-}
-
-.polaroid{
-    max-width:100%;
-    box-sizing:border-box;
 }
 
 .date{
@@ -2857,16 +2804,19 @@ body{
 .polaroid img{ width:100%; height:auto; }
 
 .polaroid{
-    position:relative;
-    top:-55px;
+    width:300px;
+    background:white;
+    padding:15px 15px 60px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 
 /* BOTTOM DECORATION */
 .bottom-decor{
     position:absolute;
-    bottom:-20px;
-    right: -50px;
+    bottom:-50px;
+    right: -90px;
 }
 
 .bottom-decor img{
@@ -2962,7 +2912,7 @@ body {
 /* Journal Background */
 .journal-bg {
     position: relative;
-    width: 1200px;
+    width: 1100px;
     margin: auto;
     background: #F7F7F7;
     border-radius: 50px;
@@ -3099,6 +3049,10 @@ body {
     position: relative;
 }
 
+.entry-card img {
+  pointer-events: none;
+}
+
 .delete-btn{
     position:absolute;
     top:10px;
@@ -3122,6 +3076,72 @@ body {
 ::-webkit-scrollbar-thumb {
     background: #CCCCCC;
     border-radius: 3px;
+}
+
+/* =======================
+   FINAL FIX (DETAIL PAGE)
+======================= */
+
+.detail-page .container{
+    width:1100px;
+    margin:50px auto;
+    background:#F7F7F7;
+    border-radius:40px;
+    padding:50px 70px;
+    position:relative;
+    display:block;
+}
+
+.detail-page .back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+}
+
+.detail-page .title-row{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:40px;
+}
+
+.detail-page .title-row h1{
+    font-size:28px;
+    margin:0;
+    white-space:nowrap;
+}
+
+.detail-page .detail-layout{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:60px;
+}
+
+.detail-page .detail-left{
+    width:500px;
+}
+
+.detail-page .detail-right{
+    flex:1;
+    display:flex;
+    justify-content:center;
+}
+
+.detail-page .polaroid {
+    width: 300px;
+    background: white;
+    padding: 15px 15px 60px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+    position: relative;  /* allows moving with top */
+    top: -60px;          /* moves it up 60px */
+}
+
+.detail-page .polaroid img{
+    width:100%;
+    display:block;
+    border-radius:8px;
 }
 
 /* ── MY BUTTERFLY ── */
@@ -3213,146 +3233,83 @@ header{
 .profile-dropdown.show{
   display: flex;
 }
-
-/* ===== FINAL NAVBAR FIX FOR DYNAMIC NAVBAR ===== */
-
-#navbar {
+/* HOME — Mood check-in interactive elements */
+.dash-mood-emoji {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 4px;
+  transition: transform 0.15s;
+  user-select: none;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-mood-emoji:hover    { transform: scale(1.2); }
+.dash-mood-emoji.selected {
+  outline: 2.5px solid var(--btn);
+  background: rgba(45,92,40,0.12);
+  transform: scale(1.2);
+}
+.dash-mood-btn {
   width: 100%;
-  position: relative;
-  z-index: 1000;
+  padding: 10px 0;
+  border-radius: 999px;
+  border: none;
+  background: var(--btn);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, opacity 0.2s;
+}
+.dash-mood-btn:hover:not(:disabled) { background: var(--btn-hover); }
+.dash-mood-btn:disabled { background: rgba(45,92,40,0.35); cursor: not-allowed; }
+.dash-mood-saved {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sage);
+  min-height: 18px;
+  margin-top: 4px;
 }
 
-#navbar .landing-navbar {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 16px 32px !important;
-  background: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(10px) !important;
-  border-bottom: 1px solid #eee !important;
-}
+/* GROWTH — stage banner (compact, emoji only — no image) */
+.growth-summary-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-#navbar .landing-logo,
-#navbar .landing-logo:visited,
-#navbar .landing-logo:hover {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  text-decoration: none !important;
-  color: #2c4d3b !important;
-  font-weight: 800 !important;
-  font-size: 20px !important;
+.growth-stage-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 16px;
+  margin-top: 14px;
 }
+.growth-stage-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.growth-stage-info { display: flex; flex-direction: column; gap: 2px; }
+.growth-stage-name { font-size: 1rem; font-weight: 800; color: #1d2a19; }
+.growth-stage-sub  { font-size: 0.82rem; color: rgba(0,0,0,0.55); font-weight: 500; }
 
-#navbar .landing-logo img {
-  width: 32px !important;
-  height: 32px !important;
-  object-fit: contain !important;
-}
+/* day-right: streak only, no image */
+.day-right { flex-shrink: 0; display: flex; align-items: center; }
+.day-streak { font-size: 0.82rem; font-weight: 700; color: rgba(0,0,0,0.5); white-space: nowrap; }
 
-#navbar .landing-navlinks {
-  display: flex !important;
-  align-items: center !important;
-  gap: 24px !important;
-}
-
-#navbar .landing-navlinks a,
-#navbar .landing-navlinks a:visited,
-#navbar .landing-navlinks a:active {
-  color: #2c4d3b !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-}
-
-#navbar .landing-navlinks a:hover {
-  color: #4c7a60 !important;
-  text-decoration: none !important;
-}
-
-#navbar .nav-dropdown {
-  position: relative !important;
-  display: inline-block !important;
-}
-
-#navbar .nav-dropbtn {
-  background: none !important;
-  border: none !important;
-  color: #2c4d3b !important;
-  font: inherit !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  padding: 0 !important;
-}
-
-#navbar .nav-dropdown-menu {
-  display: none !important;
-  position: absolute !important;
-  top: 34px !important;
-  left: 0 !important;
-  min-width: 190px !important;
-  background: #ffffff !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
-  padding: 8px 0 !important;
-  z-index: 999 !important;
-}
-
-#navbar .nav-dropdown-menu a,
-#navbar .nav-dropdown-menu a:visited,
-#navbar .nav-dropdown-menu a:active {
-  display: block !important;
-  padding: 10px 16px !important;
-  text-decoration: none !important;
-  color: #2c4d3b !important;
-  white-space: nowrap !important;
-  font-weight: 500 !important;
-}
-
-#navbar .nav-dropdown-menu a:hover {
+/* Match profile dropdown hover style */
+.nav-dropdown-menu a:hover {
   background: #f5f5f5 !important;
+  border-radius: 8px;
 }
 
-#navbar .nav-dropdown:hover .nav-dropdown-menu {
-  display: block !important;
+.nav-dropdown-menu a {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
 }
 
-#navbar .nav-profile {
-  position: relative !important;
-}
-
-#navbar .nav-profile img {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  cursor: pointer !important;
-  object-fit: cover !important;
-}
-
-#navbar .profile-dropdown {
-  display: none !important;
-  position: absolute !important;
-  right: 0 !important;
-  top: 44px !important;
-  min-width: 160px !important;
-  background: #fff !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
-  padding: 8px 0 !important;
-  z-index: 999 !important;
-}
-
-#navbar .profile-dropdown a {
-  display: block !important;
-  padding: 10px 16px !important;
-  text-decoration: none !important;
-  color: #2c4d3b !important;
-  font-weight: 500 !important;
-}
-
-#navbar .profile-dropdown a:hover {
-  background: #f5f5f5 !important;
-}
-
-#navbar .profile-dropdown.show {
-  display: block !important;
+.nav-dropdown-menu a:hover {
+  background: #f5f5f5;
 }

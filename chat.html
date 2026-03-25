@@ -11,14 +11,14 @@
 
 <body class="chat-page">
 
+  
+  <!-- Dynamic navbar -->
   <header id="navbar"></header>
-
+  
   <!-- (Optional but recommended) protect page -->
   <script>
     if (!localStorage.getItem("authToken")) window.location.href = "login.html";
   </script>
-
- 
 
   <main class="chat-wrap">
     <section class="chat-stage">
@@ -35,19 +35,6 @@
             If you are in crisis, please contact a qualified healthcare professional or
             emergency services immediately.
           </p>
-        </div>
-
-        <div class="chat-card">
-          <div class="chat-card-head">
-            <img src="logo.png" alt="" class="mini-logo" />
-            <h3>Self-Care Tools</h3>
-          </div>
-
-          <nav class="chat-tools">
-            <a href="breathing-mt.html">Breathing Exercise</a>
-            <a href="grounding.html">Grounding Exercise</a>
-            <a href="moodbooster.html">Mood Booster</a>
-          </nav>
         </div>
 
         <div class="chat-card">

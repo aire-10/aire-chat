@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ── Mind Reset: click row to toggle done ──
-  document.querySelectorAll('.mr-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('done');
-    });
-  });
+  // document.querySelectorAll('.mr-item').forEach(item => {
+  //   item.addEventListener('click', () => {
+  //     item.classList.toggle('done');
+  //   });
+  // });
 
   // ── Mood Lifting: click card to reflect ──
   document.querySelectorAll('.thought-card').forEach(card => {
@@ -85,16 +85,41 @@ function markTaskDone(btn, card) {
   if (!card) return;
   card.classList.add('completed');
 
-  // Body-booster: tick the check circle
+  // ✅ SAVE PROGRESS HERE
+  saveProgress(card);
+
   var circle = card.querySelector('.bb-check-circle');
   if (circle) {
     circle.classList.add('done');
     circle.textContent = '✓';
   }
 
-  // Mini-tasks: swap leaf emoji to checkmark
   var leaf = card.querySelector('.task-leaf');
   if (leaf) leaf.textContent = '✓';
+}
+
+function saveProgress(card) {
+  let storageKey;
+  let items;
+
+  // 🔥 Detect which page you're on
+  if (card.classList.contains("bb-card")) {
+    storageKey = "bodybooster-progress";
+    items = document.querySelectorAll(".bb-card");
+  } else {
+    storageKey = "minitasks-progress";
+    items = document.querySelectorAll(".task-card");
+  }
+
+  const completed = [];
+
+  items.forEach((item, index) => {
+    if (item.classList.contains("completed")) {
+      completed.push(index);
+    }
+  });
+
+  localStorage.setItem(storageKey, JSON.stringify(completed));
 }
 
 /* Update Mood button handler (called from onclick in HTML) */

@@ -19,7 +19,7 @@ function resetAllThoughts() {
   });
   
   // Clear saved progress
-  localStorage.removeItem('mood_lifting_progress');
+  localStorage.removeItem('moodlifting-progress');
   
   // Update counter
   updateThoughtCounter();
@@ -37,12 +37,12 @@ function saveThoughtProgress() {
     });
   });
   
-  localStorage.setItem('mood_lifting_progress', JSON.stringify(progress));
+  localStorage.setItem('moodlifting-progress', JSON.stringify(progress));
 }
 
 // Load saved progress from localStorage
 function loadThoughtProgress() {
-  const saved = localStorage.getItem('mood_lifting_progress');
+  const saved = localStorage.getItem('moodlifting-progress');
   if (!saved) return;
   
   try {
@@ -126,6 +126,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const resetBtn = document.querySelector(".cross-off-reset-btn");
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+
+      // Remove all completed styles
+      document.querySelectorAll(".cross-off-item, .thought-card, .mr-item")
+        .forEach(item => {
+          item.classList.remove("crossed-off");
+          item.classList.remove("done");
+        });
+
+      // Clear BOTH possible storage keys (safe)
+      localStorage.removeItem("moodlifting-progress");
+      localStorage.removeItem("mindreset-progress");
+
+      // Optional: reload UI cleanly
+      // location.reload();  ← optional
+    });
+  }
+});
 // Export functions for global use
 window.toggleCrossOff = toggleCrossOff;
 window.resetAllThoughts = resetAllThoughts;

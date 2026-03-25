@@ -19,9 +19,9 @@ function renderNavbar() {
         ${
           isLoggedIn
             ? `
-              <a href="home.html">Home</a>
-              <a href="chat.html">Airé</a>
-              <a href="journal.html">Journal</a>
+              <a href="home.html" class="nav-link">Home</a>
+              <a href="chat.html" class="nav-link">Airé</a>
+              <a href="journal.html" class="nav-link">Journal</a>
 
               <div class="nav-dropdown">
                 <button class="nav-dropbtn" type="button">Self Care ▾</button>
@@ -33,7 +33,7 @@ function renderNavbar() {
               </div>
 
               <a href="growth.html">Butterfly Pet</a>
-
+              
               <div class="nav-profile">
                 <img id="navProfilePic" src="profile.jpeg" alt="Profile"/>
 
@@ -45,25 +45,54 @@ function renderNavbar() {
               </div>
             `
             : `
-              <a href="landing.html">Explore</a>
-              <a href="home.html">Home</a>
-              <a href="login.html">Login</a>
-              <a href="signup.html">Sign Up</a>
+              <a href="landing.html" class="nav-link">About</a>
+              <a href="home.html" class="nav-link">Home</a>
+              <a href="login.html" class="nav-link">Login</a>
+              <a href="signup.html" class="nav-link">Sign Up</a>
             `
         }
       </nav>
     </div>
   `;
 
+  /* Dropdown behaviour */
   const profile = navbar.querySelector(".nav-profile");
   const dropdown = navbar.querySelector("#profileDropdown");
 
   if (profile && dropdown) {
-    profile.addEventListener("click", () => {
+    profile.addEventListener("click", (e) => {
+      e.stopPropagation(); // prevent immediate closing
       dropdown.classList.toggle("show");
+    });
+
+    // ✅ Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!profile.contains(e.target)) {
+        dropdown.classList.remove("show");
+      }
     });
   }
 
+  // Self Care dropdown (click instead of hover)
+  const selfCare = navbar.querySelector(".nav-dropdown");
+  const selfCareBtn = navbar.querySelector(".nav-dropbtn");
+  const selfCareMenu = navbar.querySelector(".nav-dropdown-menu");
+
+  if (selfCareBtn && selfCareMenu) {
+    selfCareBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selfCareMenu.classList.toggle("show");
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!selfCare.contains(e.target)) {
+        selfCareMenu.classList.remove("show");
+      }
+    });
+  }
+
+  /* Logout */
   const logout = navbar.querySelector("#logoutNav");
   if (logout) {
     logout.addEventListener("click", () => {
@@ -72,6 +101,7 @@ function renderNavbar() {
     });
   }
 
+  /* Hotline */
   const hotline = navbar.querySelector("#hotlineBtn");
   if (hotline) {
     hotline.addEventListener("click", () => {
@@ -83,6 +113,7 @@ function renderNavbar() {
     });
   }
 
+  /* Load user's profile photo into navbar */
   const navPic = navbar.querySelector("#navProfilePic");
 
   try {
@@ -94,4 +125,16 @@ function renderNavbar() {
   } catch (e) {
     console.log("No profile photo found");
   }
+
+const currentPage = window.location.href.split("/").pop();
+
+const links = navbar.querySelectorAll(".nav-link");
+
+links.forEach(link => {
+  const linkPage = link.getAttribute("href");
+
+  if (currentPage.includes(linkPage)) {
+    link.classList.add("active");
+  }
+});
 }

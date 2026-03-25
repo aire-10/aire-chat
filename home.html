@@ -54,20 +54,21 @@
       </a>
 
       <!-- Row 2: Mood Check-in -->
-      <a class="dash-card dash-mood" href="breathing-mt.html">
+      <div class="dash-card dash-mood">
         <h3>Mood Check-in</h3>
         <p class="dash-mood-q">How are you feeling today?</p>
 
-        <div class="dash-moods">
-          <span aria-hidden="true">😄</span>
-          <span aria-hidden="true">😊</span>
-          <span aria-hidden="true">😐</span>
-          <span aria-hidden="true">😢</span>
-          <span aria-hidden="true">😔</span>
+        <div class="dash-moods" id="dashMoods">
+          <span class="dash-mood-emoji" data-mood="joyful"  title="Joyful">😄</span>
+          <span class="dash-mood-emoji" data-mood="happy"   title="Happy">😊</span>
+          <span class="dash-mood-emoji" data-mood="neutral" title="Neutral">😐</span>
+          <span class="dash-mood-emoji" data-mood="sad"     title="Sad">😢</span>
+          <span class="dash-mood-emoji" data-mood="tired"   title="Tired">😔</span>
         </div>
 
-        <div class="dash-mood-btn">Select Mood</div>
-      </a>
+        <!-- <button class="dash-mood-btn" id="dashMoodBtn" disabled>Select Mood</button> -->
+        <div class="dash-mood-saved" id="dashMoodSaved"></div>
+      </div>
 
       <!-- Row 2: Self-care tools -->
       <section class="dash-card dash-tools">
@@ -83,10 +84,10 @@
     </div>
   </main>
 
-  <!-- Daily Affirmations logic -->
   <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
 
+    /* ── Daily Affirmations ──────────────────────── */
     const AFFIRMATIONS = [
       "I am allowed to grow at my own pace, just like my butterfly.",
       "I can take one small step today, and that is enough.",
@@ -99,40 +100,82 @@
     ];
 
     function getDailyIndex() {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = now.getMonth() + 1;
-      const d = now.getDate();
-
-      // this will now work
-      const message = AireData.getButterflyMessage();
-      const stage = AireData.getButterflyStage();
-
-      const seed = (y * 10000) + (m * 100) + d;
+      const now  = new Date();
+      const seed = (now.getFullYear() * 10000) + ((now.getMonth() + 1) * 100) + now.getDate();
       return seed % AFFIRMATIONS.length;
     }
 
     function setAffirmation() {
       const el = document.getElementById("affirmationText");
-      if (!el) return;
-      el.textContent = AFFIRMATIONS[getDailyIndex()];
+      if (el) el.textContent = AFFIRMATIONS[getDailyIndex()];
     }
 
     function scheduleMidnightRefresh() {
-      const now = new Date();
+      const now  = new Date();
       const next = new Date(now);
-      next.setHours(24,0,0,0);
-
-      const ms = next - now;
-
-      setTimeout(() => {
-        setAffirmation();
-        scheduleMidnightRefresh();
-      }, ms);
+      next.setHours(24, 0, 0, 0);
+      setTimeout(() => { setAffirmation(); scheduleMidnightRefresh(); }, next - now);
     }
 
     setAffirmation();
     scheduleMidnightRefresh();
+
+    /* ── Breathe card message ────────────────────── */
+    function refreshBreatheMsg() {
+      const el = document.querySelector(".dash-breathe-right h3");
+      if (el) el.textContent = AireData.getButterflyMessage();
+    }
+    refreshBreatheMsg();
+
+    /* ── Mood Check-in ───────────────────────────── */
+    let selectedMood = null;
+    const emojis   = document.querySelectorAll(".dash-mood-emoji");
+    const btn      = document.getElementById("dashMoodBtn");
+    const savedMsg = document.getElementById("dashMoodSaved");
+
+    emojis.forEach(el => {
+      el.addEventListener("click", () => {
+
+        // UI selection
+        emojis.forEach(e => e.classList.remove("selected"));
+        el.classList.add("selected");
+
+        const mood = el.dataset.mood;
+
+        // ✅ SAVE IMMEDIATELY
+        AireData.logMood(mood);
+
+        const meta = AireData.MOOD_META[mood] || {};
+
+        // Show feedback
+        savedMsg.textContent = `${meta.emoji || ""} ${meta.label || mood} saved!`;
+
+        // Optional: small animation reset
+        setTimeout(() => {
+          emojis.forEach(e => e.classList.remove("selected"));
+        }, 800);
+
+      });
+    });
+
+    // btn.addEventListener("click", () => {
+    //   if (!selectedMood) return;
+    //   AireData.logMood(selectedMood);
+    //   const meta = AireData.MOOD_META[selectedMood] || {};
+    //   savedMsg.textContent = `${meta.emoji || ""} ${meta.label || selectedMood} saved!`;
+    //   btn.textContent = "Mood Saved ✓";
+    //   btn.disabled    = true;
+    //   emojis.forEach(e => e.classList.remove("selected"));
+    //   refreshBreatheMsg();
+    //   setTimeout(() => { btn.textContent = "Select Mood"; selectedMood = null; }, 2000);
+    // });
+
+    /* Show last logged mood if already checked in today */
+    const latest = AireData.getLatestEntry();
+    if (latest && latest.date === new Date().toISOString().split("T")[0]) {
+      const meta = AireData.MOOD_META[latest.mood] || {};
+      savedMsg.textContent = `Last: ${meta.emoji || ""} ${meta.label || latest.mood}`;
+    }
 
   });
   </script>

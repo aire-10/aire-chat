@@ -242,35 +242,48 @@ document.addEventListener("DOMContentLoaded", () => {
     renderMessage(msg);
   };
 
-  const sendUserText = (text) => {
-    const trimmed = (text || "").trim();
-    if (!trimmed) return;
+  const sendUserText = async (text) => {
+  const trimmed = (text || "").trim();
+  if (!trimmed) return;
 
-    addMessage("user", trimmed);
-    maybeSetSessionTitle(activeId, text);
+  addMessage("user", trimmed);
+  maybeSetSessionTitle(activeId, text);
+  showTyping();
 
-    // Fake bot reply (until API is connected)
-    showTyping();
-    window.setTimeout(() => {
-      hideTyping();
-      addMessage("bot", "I hear you. Want to tell me a bit more?");
-    }, 600);
-  };
+  try {
+    const res = await fetch("http://localhost:3000/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: trimmed }),
+    });
 
-    function maybeSetSessionTitle(id, userText) {
-      const sessions = loadSessions();
-      const idx = sessions.findIndex(s => s.id === id);
-      if (idx === -1) return;
+    const data = await res.json();
 
-      // only set title if still default-ish
-      const current = sessions[idx].title || "";
-      if (current !== "New Chat") return;
+    hideTyping();
+    addMessage("bot", data.reply);
+  } catch (err) {
+    hideTyping();
+    addMessage("bot", "⚠️ Error connecting to AI");
+    console.error(err);
+  }
+};
 
-      const title = userText.trim().slice(0, 28) || "New Chat";
-      sessions[idx].title = title;
-      sessions[idx].updatedAt = Date.now();
-      saveSessions(sessions);
-    }
+function maybeSetSessionTitle(id, userText) {
+  const sessions = loadSessions();
+  const idx = sessions.findIndex(s => s.id === id);
+  if (idx === -1) return;
+
+  const current = sessions[idx].title || "";
+  if (current !== "New Chat") return;
+
+  const title = userText.trim().slice(0, 28) || "New Chat";
+  sessions[idx].title = title;
+  sessions[idx].updatedAt = Date.now();
+  saveSessions(sessions);
+}
+
 
   // -----------------------------
   // Events: form submit + Enter key
